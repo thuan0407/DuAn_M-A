@@ -287,62 +287,72 @@
                             </div>
 
                             <div class="d-flex gap-2 mt-4 buyer-action-group">
-                                <div class="flex-fill">
-                                    @if (!$accessRequest)
-                                        <button type="button"
-                                                class="buyer-btn-orange buyer-action-btn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#{{ $modalId }}">
-                                            Yêu cầu xem hồ sơ
-                                        </button>
-                                    @elseif ($accessRequest->status === 'pending')
-                                        <button type="button"
-                                                class="buyer-btn-orange buyer-action-btn"
-                                                disabled>
-                                            Đang chờ duyệt
-                                        </button>
-                                    @elseif ($accessRequest->status === 'approved')
-                                        <a href="#"
-                                           class="buyer-btn-orange buyer-action-btn">
-                                            Xem hồ sơ
-                                        </a>
-                                    @elseif ($accessRequest->status === 'rejected')
-                                        <button type="button"
-                                                class="buyer-btn-orange buyer-action-btn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#{{ $modalId }}">
-                                            Gửi lại yêu cầu
-                                        </button>
+                                @if(!$kyc)
+                                    <a href="{{route('buyer.kyc.create')}}"
+                                            class="buyer-btn-orange deal-action-btn"
+                                            data-bs-target="#{{ $modalId }}"
+                                            style="text-align: center;">
+                                        Bạn cần xác minh tài khoản trước khi xem
+                                    </a>
                                     @else
-                                        <button type="button"
-                                                class="buyer-btn-orange buyer-action-btn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#{{ $modalId }}">
-                                            Yêu cầu xem hồ sơ
-                                        </button>
-                                    @endif
-                                </div>
 
-                                <div class="flex-fill">
-                                    @if ($interestedDealIds->contains($deal->id))
-                                        <form method="POST" action="{{ route('buyer.deals.interest.destroy', $deal) }}">
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button type="submit" class="buyer-btn-soft buyer-action-btn">
-                                                Đã quan tâm
+                                    <div class="flex-fill">
+                                        @if (!$accessRequest)
+                                            <button type="button"
+                                                    class="buyer-btn-orange buyer-action-btn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#{{ $modalId }}">
+                                                Yêu cầu xem hồ sơ
                                             </button>
-                                        </form>
-                                    @else
-                                        <form method="POST" action="{{ route('buyer.deals.interest.store', $deal) }}">
-                                            @csrf
-
-                                            <button type="submit" class="buyer-btn-soft buyer-action-btn">
-                                                Quan tâm
+                                        @elseif ($accessRequest->status === 'pending')
+                                            <button type="button"
+                                                    class="buyer-btn-orange buyer-action-btn"
+                                                    disabled>
+                                                Đang chờ duyệt
                                             </button>
-                                        </form>
-                                    @endif
-                                </div>
+                                        @elseif ($accessRequest->status === 'approved')
+                                            <a href="#"
+                                            class="buyer-btn-orange buyer-action-btn">
+                                                Xem hồ sơ
+                                            </a>
+                                        @elseif ($accessRequest->status === 'rejected')
+                                            <button type="button"
+                                                    class="buyer-btn-orange buyer-action-btn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#{{ $modalId }}">
+                                                Gửi lại yêu cầu
+                                            </button>
+                                        @else
+                                            <button type="button"
+                                                    class="buyer-btn-orange buyer-action-btn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#{{ $modalId }}">
+                                                Yêu cầu xem hồ sơ
+                                            </button>
+                                        @endif
+                                    </div>
+
+                                    <div class="flex-fill">
+                                        @if ($interestedDealIds->contains($deal->id))
+                                            <form method="POST" action="{{ route('buyer.deals.interest.destroy', $deal) }}">
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button type="submit" class="buyer-btn-soft buyer-action-btn">
+                                                    Đã quan tâm
+                                                </button>
+                                            </form>
+                                        @else
+                                            <form method="POST" action="{{ route('buyer.deals.interest.store', $deal) }}">
+                                                @csrf
+
+                                                <button type="submit" class="buyer-btn-soft buyer-action-btn">
+                                                    Quan tâm
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

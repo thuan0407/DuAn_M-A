@@ -113,4 +113,16 @@ class KycController extends Controller
             ->back()
             ->with('success', 'Gửi hồ sơ xác minh thành công. Hồ sơ đang chờ admin duyệt.');
     }
+
+    public function show()
+    {
+        $kyc = KycVerification::where('user_id', Auth::id())->first();
+
+        if (!$kyc) {
+            return redirect()->route('buyer.kyc.create')
+                ->with('error', 'Bạn chưa có hồ sơ KYC.');
+        }
+
+        return view('buyer.kyc.show', compact('kyc'));
+    }
 }

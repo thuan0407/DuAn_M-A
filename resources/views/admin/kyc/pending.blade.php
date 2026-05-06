@@ -55,7 +55,7 @@
                                 <td>{{ $kyc->phone ?? 'Chưa cập nhật' }}</td>
                                 <td>{{ $kyc->created_at->format('d/m/Y H:i') }}</td>
                                 <td class="text-end">
-                                    <a href="{{ route('admin.kyc.show', $kyc) }}" class="btn btn-sm btn-primary">
+                                    <a href="{{ route('admin.kyc.show', $kyc->id) }}" class="btn btn-sm btn-primary">
                                         Xem chi tiết
                                     </a>
                                 </td>

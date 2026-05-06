@@ -18,9 +18,9 @@ class AdminKycController extends Controller
         return view('admin.kyc.pending', compact('kycs'));
     }
 
-    public function show(KycVerification $kyc)
+    public function show($id)
     {
-        $kyc->load('user');
+        $kyc = KycVerification::with('user')->findOrFail($id);
 
         return view('admin.kyc.show', compact('kyc'));
     }

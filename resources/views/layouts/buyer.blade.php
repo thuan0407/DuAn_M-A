@@ -423,6 +423,7 @@
             .buyer-search button {
                 width: 100%;
             }
+
         }
     </style>
 </head>
@@ -497,35 +498,56 @@
             <p class="buyer-logo-subtitle">Khu vực người mua và nhà đầu tư</p>
         </div>
 
-        <div class="buyer-profile-card">
-            <div class="d-flex align-items-center gap-3">
-                <div class="buyer-avatar">
-                    {{ $avatarLetter }}
-                </div>
+        @if(!$kyc)
+            <div class="buyer-profile-card">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="buyer-avatar">
+                        {{ $avatarLetter }}
+                    </div>
 
-                <div class="min-w-0">
-                    <p class="buyer-profile-label">Xin chào</p>
-                    <p class="buyer-profile-name">{{ $buyerName }}</p>
-                    <span class="buyer-profile-role">Người mua</span>
+                    <div class="min-w-0">
+                        <p class="buyer-profile-label">Xin chào</p>
+                        <p class="buyer-profile-name">{{ $buyerName }}</p>
+                        <span class="buyer-profile-role">Người mua</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        @else
+            <a href="{{route('buyer.kyc.show')}}">
+                <div class="buyer-profile-card">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="buyer-avatar">
+                            {{ $avatarLetter }}
+                        </div>
 
-        @if (!$kyc)
-            <a href="{{ route('buyer.kyc.create') }}">🔐 Đi đến xác minh</a>
-
-        @elseif ($kyc->status === 'approved')
-            <span class="text-success">✅ Đã xác minh</span>
-
-        @elseif ($kyc->status === 'pending')
-            <span class="text-warning">⏳ Đang chờ duyệt</span>
-
-        @elseif ($kyc->status === 'rejected')
-            <div>
-                <span class="text-danger">❌ Bị từ chối</span><br>
-                <a href="{{ route('buyer.kyc.create') }}">🔄 Xác minh lại</a>
-            </div>
+                        <div class="min-w-0">
+                            <p class="buyer-profile-label">Xin chào</p>
+                            <p class="buyer-profile-name">{{ $buyerName }}</p>
+                            <span class="buyer-profile-role">Người mua</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
         @endif
+
+
+        <div class="hihi" style="text-align:center;">
+            @if (!$kyc)
+                <a href="{{ route('buyer.kyc.create') }}">🔐 Đi đến xác minh</a>
+
+            @elseif ($kyc->status === 'approved')
+                <span class="text-success">✅ Đã xác minh</span>
+
+            @elseif ($kyc->status === 'pending')
+                <span class="text-warning">⏳ Đang chờ duyệt</span>
+
+            @elseif ($kyc->status === 'rejected')
+                <div>
+                    <span class="text-danger">❌ Bị từ chối</span><br>
+                    <a href="{{ route('buyer.kyc.create') }}">🔄 Xác minh lại</a>
+                </div>
+            @endif
+        </div>
 
 
 

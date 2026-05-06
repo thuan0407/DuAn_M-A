@@ -11,12 +11,15 @@ class SellerAccessRequestController extends Controller
 {
     public function index()
     {
-        $requests = DealAccessRequest::with(['buyer', 'deal'])
-            ->whereHas('deal', function ($q) {
-                $q->where('seller_id', auth()->id());
-            })
-            ->latest()
-            ->get();
+        $requests = DealAccessRequest::with([
+            'buyer.kyc', // 👈 thêm dòng này
+            'deal'
+        ])
+        ->whereHas('deal', function ($q) {
+            $q->where('seller_id', auth()->id());
+        })
+        ->latest()
+        ->get();
 
         return view('seller.access_requests.index', compact('requests'));
     }

@@ -31,4 +31,9 @@ protected $fillable = [
     {
         return $this->belongsTo(User::class);
     }
+
+    public function kyc()
+{
+    return $this->hasOne(\App\Models\KycVerification::class, 'user_id');
+}
 }

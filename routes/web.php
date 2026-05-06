@@ -103,9 +103,10 @@ Route::middleware(['auth'])->prefix('buyer')->name('buyer.')->group(function () 
 
 
     //Xác minh người dùng
-    Route::get('/kyc', [KycController::class, 'create'])->name('kyc.create');
+    Route::get('/kyc/create', [KycController::class, 'create'])->name('kyc.create');
     Route::post('/kyc', [KycController::class, 'store'])->name('kyc.store');
-    
+    Route::get('/kyc', [KycController::class, 'show'])->name('kyc.show');
+
 });
 
 
