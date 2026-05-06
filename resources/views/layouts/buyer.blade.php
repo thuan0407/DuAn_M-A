@@ -94,7 +94,7 @@
             border-radius: 18px;
             background: linear-gradient(135deg, var(--buyer-orange), #fb923c);
             color: #ffffff;
-            display: inline-flex;
+display: inline-flex;
             align-items: center;
             justify-content: center;
             font-weight: 900;
@@ -199,7 +199,7 @@
         }
 
         .buyer-nav-link.active .buyer-nav-dot {
-            background: #ffffff;
+background: #ffffff;
         }
 
         .buyer-sidebar-footer {
@@ -310,7 +310,7 @@
         }
 
         .buyer-top-profile-role {
-            font-size: 12px;
+font-size: 12px;
             color: var(--buyer-muted);
             margin: 2px 0 0;
         }
@@ -423,6 +423,7 @@
             .buyer-search button {
                 width: 100%;
             }
+
         }
     </style>
 </head>
@@ -437,7 +438,7 @@
         [
             'label' => 'Trang chủ',
             'route' => 'buyer.home',
-            'active' => 'buyer.home',
+'active' => 'buyer.home',
         ],
         [
             'label' => 'Deal quan tâm',
@@ -497,35 +498,54 @@
             <p class="buyer-logo-subtitle">Khu vực người mua và nhà đầu tư</p>
         </div>
 
-        <div class="buyer-profile-card">
-            <div class="d-flex align-items-center gap-3">
-                <div class="buyer-avatar">
-                    {{ $avatarLetter }}
-                </div>
+        @if(!$kyc)
+            <div class="buyer-profile-card">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="buyer-avatar">
+                        {{ $avatarLetter }}
+                    </div>
 
-                <div class="min-w-0">
-                    <p class="buyer-profile-label">Xin chào</p>
-                    <p class="buyer-profile-name">{{ $buyerName }}</p>
-                    <span class="buyer-profile-role">Người mua</span>
+                    <div class="min-w-0">
+                        <p class="buyer-profile-label">Xin chào</p>
+                        <p class="buyer-profile-name">{{ $buyerName }}</p>
+                        <span class="buyer-profile-role">Người mua</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        @else
+            <a href="{{route('buyer.kyc.show')}}">
+                <div class="buyer-profile-card">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="buyer-avatar">
+                            {{ $avatarLetter }}
+                        </div>
 
-        @if (!$kyc)
-            <a href="{{ route('buyer.kyc.create') }}">🔐 Đi đến xác minh</a>
-
-        @elseif ($kyc->status === 'approved')
-            <span class="text-success">✅ Đã xác minh</span>
-
-        @elseif ($kyc->status === 'pending')
-            <span class="text-warning">⏳ Đang chờ duyệt</span>
-
-        @elseif ($kyc->status === 'rejected')
-            <div>
-                <span class="text-danger">❌ Bị từ chối</span><br>
-                <a href="{{ route('buyer.kyc.create') }}">🔄 Xác minh lại</a>
-            </div>
+                        <div class="min-w-0">
+                            <p class="buyer-profile-label">Xin chào</p>
+                            <p class="buyer-profile-name">{{ $buyerName }}</p>
+                            <span class="buyer-profile-role">Người mua</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
         @endif
+<div class="hihi" style="text-align:center;">
+            @if (!$kyc)
+                <a href="{{ route('buyer.kyc.create') }}">🔐 Đi đến xác minh</a>
+
+            @elseif ($kyc->status === 'approved')
+                <span class="text-success">✅ Đã xác minh</span>
+
+            @elseif ($kyc->status === 'pending')
+                <span class="text-warning">⏳ Đang chờ duyệt</span>
+
+            @elseif ($kyc->status === 'rejected')
+                <div>
+                    <span class="text-danger">❌ Bị từ chối</span><br>
+                    <a href="{{ route('buyer.kyc.create') }}">🔄 Xác minh lại</a>
+                </div>
+            @endif
+        </div>
 
 
 
@@ -587,8 +607,7 @@
 
             <form method="POST" action="{{ route('logout') }}" class="mt-4">
                 @csrf
-
-                <button type="submit" class="buyer-logout-btn">
+<button type="submit" class="buyer-logout-btn">
                     Đăng xuất
                 </button>
             </form>

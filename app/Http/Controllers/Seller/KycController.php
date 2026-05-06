@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Buyer;
+namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 use App\Models\KycVerification;
@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Storage;
 
 class KycController extends Controller
 {
-    public function create(Request $request)
+    public function create()
     {
         $kyc = KycVerification::where('user_id', Auth::id())->first();
 
-        return view('buyer.kyc.create', compact('kyc'));
+        return view('seller.kyc.create', compact('kyc'));
     }
 
     public function store(Request $request)
@@ -70,7 +70,6 @@ class KycController extends Controller
 
             'selfie_image.required' => 'Vui lòng tải ảnh selfie xác minh.',
             'selfie_image.image' => 'Ảnh selfie phải là file hình ảnh.',
-
             'selfie_image.mimes' => 'Ảnh selfie phải có định dạng jpg, jpeg, png hoặc webp.',
             'selfie_image.max' => 'Ảnh selfie không được vượt quá 4MB.',
 
@@ -120,10 +119,10 @@ class KycController extends Controller
         $kyc = KycVerification::where('user_id', Auth::id())->first();
 
         if (!$kyc) {
-            return redirect()->route('buyer.kyc.create')
-                ->with('error', 'Bạn chưa có hồ sơ KYC.');
+            return redirect()->route('seller.kyc.create')
+                ->with('error', 'Bạn chưa có hồ sơ KYC. Vui lòng gửi thông tin để tiếp tục.');
         }
 
-        return view('buyer.kyc.show', compact('kyc'));
+        return view('seller.kyc.show', compact('kyc'));
     }
 }
