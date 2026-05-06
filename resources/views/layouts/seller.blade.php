@@ -391,6 +391,8 @@
             'badge' => $pendingAccessCount,
         ],
     ];
+
+    $kyc = $kyc ?? \App\Models\KycVerification::where('user_id', Auth::id())->first();
 @endphp
 
 <div class="seller-shell">
@@ -415,18 +417,71 @@
             <p class="seller-logo-subtitle">Khu vực người bán doanh nghiệp</p>
         </div>
 
-        <div class="seller-profile-card">
-            <div class="d-flex align-items-center gap-3">
-                <div class="seller-avatar">
-                    {{ $avatarLetter }}
-                </div>
+        @if(!$kyc)
+            <a href="{{ route('seller.kyc.create') }}" class="text-decoration-none">
+                <div class="seller-profile-card">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="seller-avatar">
+                            {{ $avatarLetter }}
+                        </div>
 
-                <div>
-                    <p class="seller-profile-label">Xin chào</p>
-                    <p class="seller-profile-name">{{ $sellerName }}</p>
-                    <span class="seller-profile-role">Người bán</span>
+                        <div>
+                            <p class="seller-profile-label">Xin chào</p>
+                            <p class="seller-profile-name">{{ $sellerName }}</p>
+                            <span class="seller-profile-role">Người bán</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </a>
+        @else
+            <a href="{{ route('seller.kyc.show') }}" class="text-decoration-none">
+                <div class="seller-profile-card">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="seller-avatar">
+                            {{ $avatarLetter }}
+                        </div>
+
+                        <div>
+                            <p class="seller-profile-label">Xin chào</p>
+                            <p class="seller-profile-name">{{ $sellerName }}</p>
+                            <span class="seller-profile-role">Người bán</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        @endif
+
+        <div class="px-3 mb-3 text-center bg-white rounded-3 border">
+            @if (!$kyc)
+                <div class="text-start">
+                    <a href="{{ route('seller.kyc.create') }}" class="text-decoration-none">
+                        🔐 <strong>Chưa xác minh</strong>
+                    </a>
+                </div>
+            @elseif ($kyc->status === 'approved')
+                <a href="{{ route('seller.kyc.show') }}" class="text-decoration-none text-success">
+                    <div>
+                        ✅ <strong>Đã xác minh</strong>
+                    </div>
+                </a>
+            @elseif ($kyc->status === 'pending')
+                <a href="{{ route('seller.kyc.show') }}" class="text-decoration-none text-warning">
+                    <div>
+                        ⏳ <strong>Đang chờ duyệt</strong>
+                    </div>
+                </a>
+            @elseif ($kyc->status === 'rejected')
+                <a href="{{ route('seller.kyc.show') }}" class="text-decoration-none text-danger">
+                    <div>
+                        ❌ <strong>Bị từ chối</strong>
+                    </div>
+                </a>
+                <div class="mt-2">
+                    <a href="{{ route('seller.kyc.create') }}" class="btn btn-sm btn-outline-warning">
+                        🔄 Xác minh lại
+                    </a>
+                </div>
+            @endif
         </div>
 
         <nav class="seller-nav">

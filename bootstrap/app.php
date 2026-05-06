@@ -11,7 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'kyc.approved' => \App\Http\Middleware\EnsureSellerKycApproved::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
