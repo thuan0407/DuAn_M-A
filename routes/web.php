@@ -18,7 +18,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Buyer\BuyerOfferController;
 use App\Http\Controllers\Buyer\BuyerSuccessfulDealController;
-use App\Http\Controllers\Buyer\KycController;
+use App\Http\Controllers\Buyer\KycController as BuyerKycController;
+use App\Http\Controllers\Seller\KycController as SellerKycController;
 use App\Http\Controllers\Seller\SellerOfferController;
 
 Route::get('/', function () {
@@ -53,21 +54,22 @@ Route::get('/dashboard', function () {
 
 
 // Người mua
-Route::middleware(['auth'])->prefix('buyer')->name('buyer.')->group(function () {
+Route::middleware(['web', 'auth'])
+    ->prefix('buyer')
+    ->name('buyer.')
+    ->group(function () {
+
     Route::get('/home', [BuyerHomeController::class, 'index'])->name('home');
 
     Route::get('/dashboard', function () {
         return to_route('buyer.home');
     })->name('dashboard');
 
-    Route::get('/deals', [BuyerDealController::class, 'index'])
-        ->name('deals');
+    Route::get('/deals', [BuyerDealController::class, 'index'])->name('deals');
 
-    Route::get('/deals/{deal}/profile', [BuyerDealController::class, 'show'])
-        ->name('deals.show');
+    Route::get('/deals/{deal}/profile', [BuyerDealController::class, 'show'])->name('deals.show');
 
-    Route::get('/interests', [BuyerInterestController::class, 'index'])
-        ->name('interests');
+    Route::get('/interests', [BuyerInterestController::class, 'index'])->name('interests');
 
     Route::post('/deals/{deal}/interest', [BuyerInterestController::class, 'store'])
         ->name('deals.interest.store');
@@ -79,35 +81,29 @@ Route::middleware(['auth'])->prefix('buyer')->name('buyer.')->group(function () 
         [BuyerDealAccessRequestController::class, 'store']
     )->name('deals.access_requests.store');
 
-    Route::get('/about', function () {
-        return view('buyer.about');
-    })->name('about');
+    Route::get('/about', fn() => view('buyer.about'))->name('about');
+    Route::get('/privacy', fn() => view('buyer.privacy'))->name('privacy');
 
-    Route::get('/privacy', function () {
-        return view('buyer.privacy');
-    })->name('privacy');
-    
-    //deal thành công của người mua
+    // SUCCESS DEAL
     Route::get('/successful-deals', [BuyerSuccessfulDealController::class, 'index'])
         ->name('successful_deals.index');
 
     Route::get('/successful-deals/{offer}', [BuyerSuccessfulDealController::class, 'show'])
         ->name('successful_deals.show');
 
-    //tạo offer
+    // OFFER
     Route::get('/deals/{deal}/offers/create', [BuyerOfferController::class, 'create'])
         ->name('deals.offers.create');
 
     Route::post('/deals/{deal}/offers', [BuyerOfferController::class, 'store'])
         ->name('deals.offers.store');
 
+   
+    Route::get('/kyc/create', [BuyerKycController::class, 'create'])->name('kyc.create');
+    Route::post('/kyc', [BuyerKycController::class, 'store'])->name('kyc.store');
+    Route::get('/kyc', [BuyerKycController::class, 'show'])->name('kyc.show');
 
-    //Xác minh người dùng
-    Route::get('/kyc', [KycController::class, 'create'])->name('kyc.create');
-    Route::post('/kyc', [KycController::class, 'store'])->name('kyc.store');
-    
 });
-
 
 //Thông báo
 Route::post('/notifications/{id}/read', function ($id) {
@@ -126,7 +122,18 @@ Route::post('/notifications/{id}/read', function ($id) {
 
 
 // Người bán
-Route::middleware(['auth'])->prefix('seller')->name('seller.')->group(function () {
+Route::middleware(['web', 'auth'])->prefix('seller')->name('seller.')->group(function () {
+    Route::get('/kyc/create', [SellerKycController::class, 'create'])
+        ->name('kyc.create');
+
+    Route::get('/kyc', [SellerKycController::class, 'show'])
+        ->name('kyc.show');
+
+    Route::post('/kyc', [SellerKycController::class, 'store'])
+        ->name('kyc.store');
+});
+
+Route::middleware(['web', 'auth', 'kyc.approved'])->prefix('seller')->name('seller.')->group(function () {
     Route::get('/dashboard', [SellerDashboardController::class, 'index'])
         ->name('dashboard');
 
@@ -193,13 +200,11 @@ Route::middleware(['auth'])->prefix('seller')->name('seller.')->group(function (
         ->name('offers.show');
 
     Route::post('/offers/{offer}/accept', [SellerOfferController::class, 'accept'])
-    ->name('offers.accept');
+        ->name('offers.accept');
 
     Route::post('/offers/{offer}/reject', [SellerOfferController::class, 'reject'])
         ->name('offers.reject');
-
 });
-
 
 
 //ADmin
