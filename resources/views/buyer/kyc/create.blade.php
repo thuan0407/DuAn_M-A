@@ -45,9 +45,6 @@
                         <option value="cccd" {{ old('document_type', $kyc->document_type ?? '') === 'cccd' ? 'selected' : '' }}>
                             Căn cước công dân
                         </option>
-                        <option value="cmnd" {{ old('document_type', $kyc->document_type ?? '') === 'cmnd' ? 'selected' : '' }}>
-                            Chứng minh nhân dân
-                        </option>
                         <option value="passport" {{ old('document_type', $kyc->document_type ?? '') === 'passport' ? 'selected' : '' }}>
                             Hộ chiếu
                         </option>

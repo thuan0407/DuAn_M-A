@@ -548,6 +548,25 @@ font-size: 12px;
         </div>
 
 
+        <div class="hihi" style="text-align:center;">
+            @if (!$kyc)
+                <a href="{{ route('buyer.kyc.create') }}">🔐 Đi đến xác minh</a>
+
+            @elseif ($kyc->status === 'approved')
+                <span class="text-success">✅ Đã xác minh</span>
+
+            @elseif ($kyc->status === 'pending')
+                <span class="text-warning">⏳ Đang chờ duyệt</span>
+
+            @elseif ($kyc->status === 'rejected')
+                <div>
+                    <span class="text-danger">❌ Bị từ chối</span><br>
+                    <a href="{{ route('buyer.kyc.create') }}">🔄 Xác minh lại</a>
+                </div>
+            @endif
+        </div>
+
+
 
         <nav class="buyer-nav">
             <div class="buyer-nav-label">Menu chính</div>

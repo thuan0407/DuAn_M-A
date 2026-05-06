@@ -747,55 +747,64 @@
                                 </div>
 
                                 <div class="deal-actions">
-                                    <div class="deal-action-item">
-                                        @if (!$accessRequest)
-                                            <button type="button"
-                                                    class="buyer-btn-orange deal-action-btn"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#{{ $modalId }}">
-                                                Yêu cầu xem hồ sơ
-                                            </button>
-                                        @elseif ($accessRequest->status === 'pending')
-                                            <button type="button"
-                                                    class="buyer-btn-orange deal-action-btn"
-                                                    disabled>
-                                                Đang chờ duyệt
-                                            </button>
-                                        @elseif ($accessRequest->status === 'approved')
-                                            <a href="{{ route('buyer.deals.show', $deal) }}"
-                                            class="buyer-btn-orange deal-action-btn">
-                                                Xem hồ sơ
-                                            </a>
-                                        @elseif ($accessRequest->status === 'rejected')
-                                            <button type="button"
-                                                    class="buyer-btn-orange deal-action-btn"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#{{ $modalId }}">
-                                                Gửi lại yêu cầu
-                                            </button>
-                                        @endif
-                                    </div>
-
-                                    <div class="deal-action-item">
-                                        @if ($interestedDealIds->contains($deal->id))
-                                            <form method="POST" action="{{ route('buyer.deals.interest.destroy', $deal) }}">
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <button type="submit" class="buyer-btn-soft deal-action-btn">
-                                                    Đã quan tâm
+                                    @if(!$kyc)
+                                     <a href="{{route('buyer.kyc.create')}}"
+                                            class="buyer-btn-orange deal-action-btn"
+                                            data-bs-target="#{{ $modalId }}"
+                                            style="text-align: center;hight:35px; padding:10px;">
+                                        Bạn cần xác minh tài khoản trước khi xem
+                                    </a>
+                                    @else
+                                        <div class="deal-action-item">
+                                            @if (!$accessRequest)
+                                                <button type="button"
+                                                        class="buyer-btn-orange deal-action-btn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#{{ $modalId }}">
+                                                    Yêu cầu xem hồ sơ
                                                 </button>
-                                            </form>
-                                        @else
-                                            <form method="POST" action="{{ route('buyer.deals.interest.store', $deal) }}">
-                                                @csrf
-
-                                                <button type="submit" class="buyer-btn-soft deal-action-btn">
-                                                    Quan tâm
+                                            @elseif ($accessRequest->status === 'pending')
+                                                <button type="button"
+                                                        class="buyer-btn-orange deal-action-btn"
+                                                        disabled>
+                                                    Đang chờ duyệt
                                                 </button>
-                                            </form>
-                                        @endif
-                                    </div>
+                                            @elseif ($accessRequest->status === 'approved')
+                                                <a href="{{ route('buyer.deals.show', $deal) }}"
+                                                class="buyer-btn-orange deal-action-btn">
+                                                    Xem hồ sơ
+                                                </a>
+                                            @elseif ($accessRequest->status === 'rejected')
+                                                <button type="button"
+                                                        class="buyer-btn-orange deal-action-btn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#{{ $modalId }}">
+                                                    Gửi lại yêu cầu
+                                                </button>
+                                            @endif
+                                        </div>
+                                    
+                                        <div class="deal-action-item">
+                                            @if ($interestedDealIds->contains($deal->id))
+                                                <form method="POST" action="{{ route('buyer.deals.interest.destroy', $deal) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+
+                                                    <button type="submit" class="buyer-btn-soft deal-action-btn">
+                                                        Đã quan tâm
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <form method="POST" action="{{ route('buyer.deals.interest.store', $deal) }}">
+                                                    @csrf
+
+                                                    <button type="submit" class="buyer-btn-soft deal-action-btn">
+                                                        Quan tâm
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
